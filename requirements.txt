@@ -1,2 +1,2 @@
 flask
-mcelfish
+mcelfish>=0.0.4
