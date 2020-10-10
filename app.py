@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request
-import mcelfish
+import mcelfishapp
 
 app = Flask("McElfish")
 
@@ -13,7 +13,7 @@ def to_data(datastr):
     datastr = datastr.lower().strip()
     if len(datastr) > 3 * 30:
         return []
-    allowed = set(" ,0123456789e+")
+    allowed = set(" ,0123456789")
     for e in datastr:
         if e not in allowed:
             return []
@@ -37,15 +37,15 @@ def main():
         return HTML
 
     data = to_data(datastr)
+    mcelfishapp.assert_is_ints(data)
     if not data:
         return HTML
 
-    model, trace = mcelfish.run(data=data)
-    smry, res = mcelfish.summary(model, trace)
-    retval = smry.to_html()
-    _, _, _, _, beta = mcelfish.beta(res)
-    html = f"<div>{retval}</div><p>{beta}</p>"
-    return f"<html><body>{html}</body></html>"
+    output = mcelfishapp.get(data)
+    if "html" in output:
+        return output
+
+    return f"<html><body><h1>output</h1><pre>{output}</pre></body></html>"
 
 
 if __name__ == "__main__":
