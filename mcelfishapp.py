@@ -50,12 +50,15 @@ def get(data):
     statusfname = _statusfname(data)
     if os.path.isfile(statusfname):
         with open(statusfname, "r") as fh:
-            return "".join(fh.read())
+            retval = "".join(fh.read())
+        if not retval.strip():
+            return "Computing ... (refresh in a minute)"
+        return retval
     else:
         args = [str(e) for e in data]
         Path(statusfname).touch()
         subprocess.Popen(["python", __file__, *args])
-        return "Computing ..."
+        return "Computing ... (refresh in a minute)"
 
 
 def main():

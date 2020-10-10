@@ -42,6 +42,14 @@ def main():
         return HTML
 
     output = mcelfishapp.get(data)
+    if not output:
+        return (
+            f"<html><body>"
+            + f"<p>type={type(output)}</p>"
+            + f"<pre>{output}</pre>"
+            + f"</body></html>"
+        )
+
     if "html" in output:
         return output
 
